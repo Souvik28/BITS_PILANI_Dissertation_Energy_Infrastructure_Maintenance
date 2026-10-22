@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "graphrag-energy-maintenance"
+version = "1.0.0"
+description = "Graph-RAG for grounded decision support in energy infrastructure maintenance (BITS Pilani dissertation)."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

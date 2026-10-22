@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# The core Graph-RAG pipeline runs on the Python STANDARD LIBRARY ALONE.
+# Everything below is OPTIONAL and upgrades a specific component when installed.
+# Install all extras:   pip install -r requirements.txt
+# ---------------------------------------------------------------------------
+
+# Graph backend (production). Needs a running Neo4j (see docker/ directory).
+neo4j>=5.14,<6
+
+# Real graph algorithms / in-memory graph (preferred over the pure-python fallback).
+networkx>=3.1
+
+# Dense neural embeddings (all-MiniLM-L6-v2 / BGE). Large download on first use.
+sentence-transformers>=2.2
+
+# Fast vector search (falls back to numpy / pure-python if absent).
+faiss-cpu>=1.7 ; platform_system != "Windows"
+numpy>=1.24
+
+# Interactive decision-support dashboard.
+streamlit>=1.30
+
+# Data-schema visualization (notebook, scripts/visualize.py, Streamlit "Data schema" tab).
+matplotlib>=3.6
+pandas>=1.5
+
+# Notebook (notebooks/01_data_schema_exploration.ipynb). Only needed to run the notebook.
+jupyter>=1.0
+notebook>=6.5
+
+# Synthetic text/name generation (the generator has a built-in fallback if absent).
+Faker>=22.0
+
+# ---------------------------------------------------------------------------
+# Not pinned here (optional, used only if you wire them up):
+#   ollama  -> run a local LLM; this project talks to it over plain HTTP.
+#   ragas, trulens-eval -> external eval judges; lexical metrics are built in.
+#   langgraph, langchain, llama-index -> the router policy is reimplemented
+#       dependency-free, but these can wrap it if desired.
+# ---------------------------------------------------------------------------

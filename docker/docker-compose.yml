@@ -1,0 +1,40 @@
+# Local Neo4j graph backend for the Graph-RAG pipeline.
+#
+# Usage:
+#   cd docker && docker compose up -d
+#   # Neo4j browser: http://localhost:7474  (user: neo4j / pass: graphrag_pw)
+#   # Then point the pipeline at it:
+#   export GRAPHRAG_GRAPH=neo4j
+#   export NEO4J_URI=bolt://localhost:7687
+#   export NEO4J_USER=neo4j
+#   export NEO4J_PASSWORD=graphrag_pw
+#   python -m scripts.build_index      # loads the graph into Neo4j
+#
+# Tear down (keeps data volume):   docker compose down
+# Tear down + wipe data:           docker compose down -v
+services:
+  neo4j:
+    image: neo4j:5.20-community
+    container_name: graphrag-neo4j
+    ports:
+      - "7474:7474"   # HTTP browser
+      - "7687:7687"   # Bolt protocol
+    environment:
+      NEO4J_AUTH: "neo4j/graphrag_pw"
+      NEO4J_server_memory_heap_initial__size: "512m"
+      NEO4J_server_memory_heap_max__size: "1G"
+      NEO4J_server_memory_pagecache_size: "512m"
+      # APOC is handy for graph exploration but not required by this project.
+      NEO4J_PLUGINS: '["apoc"]'
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
